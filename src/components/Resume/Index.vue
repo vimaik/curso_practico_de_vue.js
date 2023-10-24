@@ -1,11 +1,25 @@
 <template>
    <main>
     <p>{{ showedLabel }}</p>
-    <h1>{{ showedAmount }}</h1>
+    <h1>{{ showedAmountWithCurrency }}</h1>
+    <div class="graphic">
+        <slot name="graphic"></slot>
+    </div>
+    <div class="action">
+        <slot name="action"></slot>
+    </div>
    </main> 
 </template>
 
 <script>
+const currencyFormatter = new Intl.NumberFormat(
+    "es-ES",
+    {
+        style: "currency",
+        currency: "EUR",
+    }
+);
+
 export default {
     props: {
         date: {
@@ -30,6 +44,9 @@ export default {
             return this.amount !== null
                 ? this.amount
                 : this.totalAmount;
+        },
+        showedAmountWithCurrency() {
+            return currencyFormatter.format(this.showedAmount);
         },
     },
 };
