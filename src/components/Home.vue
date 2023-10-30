@@ -51,7 +51,7 @@ export default {
         id: 1,
         title: "Movimiento 2",
         description: "Descripción del movimiento 2",
-        amount: 2500,
+        amount: -2500,
       }, {
         id: 2,
         title: "Movimiento 3",
@@ -61,7 +61,7 @@ export default {
         id: 3,
         title: "Movimiento 4",
         description: "Descripción del movimiento 4",
-        amount: 2500,
+        amount: -2500,
       }, {
         id: 4,
         title: "Movimiento 5",
@@ -71,7 +71,7 @@ export default {
         id: 5,
         title: "Movimiento 6",
         description: "Descripción del movimiento 6",
-        amount: 2500,
+        amount: -2500,
       }, {
         id: 6,
         title: "Movimiento 7",
@@ -81,7 +81,7 @@ export default {
         id: 7,
         title: "Movimiento 8",
         description: "Descripción del movimiento 8",
-        amount: 2500,
+        amount: -2500,
       },
        {
         id: 8,
