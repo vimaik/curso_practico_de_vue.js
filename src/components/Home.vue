@@ -10,7 +10,7 @@
         :amount="amount"
       >
         <template #graphic>
-          <Graphic />
+          <Graphic :amounts="amounts" />
         </template>
         <template #action>
           <Action />
@@ -46,6 +46,7 @@ export default {
     return {
       date: new Date(),
       amount: 22500,
+      amounts: [100, 200, 500, 200, -400, -600, -300, 0, 300, 500],
       movements: [{
         id: 0,
         title: "Movimiento 1",
