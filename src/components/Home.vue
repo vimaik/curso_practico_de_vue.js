@@ -10,7 +10,7 @@
         :amount="amount"
       >
         <template #graphic>
-          <Graphic :amounts="amounts" />
+          <Graphic :amounts="latestAmounts" />
         </template>
         <template #action>
           <Action />
@@ -46,55 +46,88 @@ export default {
     return {
       date: new Date(),
       amount: 22500,
-      amounts: [100, 200, 500, 200, -400, -600, -300, 0, 300, 500],
       movements: [{
         id: 0,
         title: "Movimiento 1",
         description: "Descripción del movimiento 1",
-        amount: 2500,
+        amount: 100,
+        movementDate: new Date("09-25-2023"),
       }, {
         id: 1,
         title: "Movimiento 2",
         description: "Descripción del movimiento 2",
-        amount: -2500,
+        amount: 200,
+        movementDate: new Date("10-06-2023"),
       }, {
         id: 2,
         title: "Movimiento 3",
         description: "Descripción del movimiento 3",
-        amount: 2500,
+        amount: 500,
+        movementDate: new Date("10-15-2023"),
       }, {
         id: 3,
         title: "Movimiento 4",
         description: "Descripción del movimiento 4",
-        amount: -2500,
+        amount: 200,
+        movementDate: new Date("10-20-2023"),
       }, {
         id: 4,
         title: "Movimiento 5",
         description: "Descripción del movimiento 5",
-        amount: 2500,
+        amount: -400,
+        movementDate: new Date("10-24-2023"),
       }, {
         id: 5,
         title: "Movimiento 6",
         description: "Descripción del movimiento 6",
-        amount: -2500,
+        amount: -600,
+        movementDate: new Date("10-30-2023"),
       }, {
         id: 6,
         title: "Movimiento 7",
         description: "Descripción del movimiento 7",
-        amount: 2500,
+        amount: -300,
+        movementDate: new Date("11-01-2023"),
       }, {
         id: 7,
         title: "Movimiento 8",
         description: "Descripción del movimiento 8",
-        amount: -2500,
+        amount: 0,
+        movementDate: new Date("11-03-2023"),
       },
        {
         id: 8,
         title: "Movimiento 9",
         description: "Descripción del movimiento 9",
-        amount: 2500,
+        amount: 300,
+        movementDate: new Date("11-05-2023"),
+      },
+      {
+        id: 9,
+        title: "Movimiento 9",
+        description: "Descripción del movimiento 9",
+        amount: 500,
+        date: new Date("11-06-2023"),
       }]
     }
   },
+  computed: {
+    latestAmounts() {
+      return this.movements
+        .filter(movement => {
+          const today = new Date();
+          const limitDate = today.setDate(today.getDate() - 30);
+
+          return movement.movementDate > limitDate;
+        })
+        .map(movement => movement.amount);
+    },
+    totalLatestAmounts() {
+      return this.latestAmounts.reduce(
+        (sum, amount) => sum + amount,
+        0
+      );
+    },
+  }
 };
 </script>
