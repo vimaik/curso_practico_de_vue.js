@@ -13,7 +13,11 @@
           <Graphic :amounts="latestAmounts" />
         </template>
         <template #action>
-          <Action />
+          <Action
+            @create="create"
+            :new-movement-id="newMovementId"
+          />
+          <!-- <Action :new-id="50" /> -->
         </template>
       </Resume>
     </template>
@@ -106,7 +110,7 @@ export default {
         description: "Descripción del movimiento 10",
         amount: 500,
         movementDate: new Date("11-06-2023"),
-      }]
+      }],
     }
   },
   computed: {
@@ -126,6 +130,14 @@ export default {
         0
       );
     },
+    newMovementId() {
+      return Math.max(...this.movements.map(m => m.id)) + 1
+    },
+  },
+  methods: {
+    create(movement) {
+      this.movements.push(movement);
+    }
   }
 };
 </script>
