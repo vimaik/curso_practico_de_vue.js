@@ -1,6 +1,6 @@
 <template>
    <main>
-    <p>{{ showedLabel }}</p>
+    <p class="label">{{ showedLabel }}</p>
     <h1>{{ showedAmountWithCurrency }}</h1>
     <div class="graphic">
         <slot name="graphic"></slot>
@@ -22,12 +22,17 @@ const currencyFormatter = new Intl.NumberFormat(
 
 export default {
     props: {
-        date: {
-            type: Date,
-            required: false,
+        totalLabel: {
+            type: String,
+            default: "Ahorro total",
+        },
+        label: {
+            type: String,
+            required: null,
         },
         totalAmount: {
             type: Number,
+            default: 0,
         },
         amount: {
             type: Number,
@@ -36,9 +41,9 @@ export default {
     },
     computed: {
         showedLabel() {
-            return this.date !== null
+            return this.label !== null
                 ? this.date.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: '2-digit' })
-                : "Ahorro total"
+                : this.totalLabel;
         },
         showedAmount() {
             return this.amount !== null
@@ -65,6 +70,12 @@ h1,
 p {
   margin: 0;
   text-align: center;
+}
+
+.label {
+    color: #444444;
+    font-size: 2em;
+    font-weight: bold;
 }
 
 h1 {
