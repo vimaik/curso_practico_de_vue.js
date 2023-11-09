@@ -7,7 +7,7 @@
       <Resume
         :total-label="'Ahorro total'"
         :label="label"
-        :total-amount="1000000"
+        :total-amount="totalAmount"
         :amount="amount"
       >
         <template #graphic>
@@ -77,6 +77,9 @@ export default {
       } else {
         return 0;
       }
+    },
+    totalAmount() {
+      return this.movements.reduce((total, movement) => total + movement.amount, 0);
     },
   },
   mounted() {
