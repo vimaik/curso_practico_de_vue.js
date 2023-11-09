@@ -59,6 +59,11 @@ const submit = () => {
         description: description.value,
         movementDate: new Date(),
     });
+
+    title.value = "";
+    amount.value = 0;
+    description.value = "";
+    movementType.value = "Ingreso";
 }
 </script>
 
