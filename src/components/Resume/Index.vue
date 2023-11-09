@@ -1,7 +1,10 @@
 <template>
    <main>
     <p class="label">{{ showedLabel }}</p>
-    <h1>{{ showedAmountWithCurrency }}</h1>
+    <h1 :class="{
+        'red': isNegative,
+        'green': !isNegative
+    }">{{ showedAmountWithCurrency }}</h1>
     <div class="graphic">
         <slot name="graphic"></slot>
     </div>
@@ -53,6 +56,9 @@ export default {
         showedAmountWithCurrency() {
             return currencyFormatter.format(this.showedAmount);
         },
+        isNegative() {
+            return this.showedAmount < 0;
+        },
     },
 };
 </script>
@@ -90,5 +96,13 @@ h1 {
   width: 100%;
   padding: 48px 24px;
   box-sizing: border-box;
+}
+
+.red {
+    color: red;
+}
+
+.green {
+    color: green;
 }
 </style>
