@@ -36,7 +36,14 @@
 </template>
 
 <script setup>
-import { computed, defineProps, ref, toRefs } from "vue";
+import {
+    computed,
+    defineEmits,
+    defineProps,
+    ref,
+    toRefs,
+    watch
+} from "vue";
 
 const props = defineProps({
     amounts: {
@@ -72,6 +79,8 @@ const amountToPixels = (amount) => {
     return 200 - viewBoxAdaptedAmount;
 }
 
+// Como el viewBox que contien la gráfica de importes va desde0 a -200,
+// El punto 0 de l eje 'Y' de la gráfica está en -100
 const yZeroPoint = computed(() => {
     return amountToPixels(-100);
 });
@@ -79,10 +88,10 @@ const yZeroPoint = computed(() => {
 const points = computed(() => {
     const numPoints = amounts.value.length;
     // Parámetros de Array.prototype.reduce((a, b, c) => {}, d);
-    //     a: variableAcumuladoraARetornar
+    //     a: variableAcumuladoraADevolver
     //     b: valorActualdelArrayOriginal
     //     c: indiceDelValorActualDelArrayOriginal
-    //     d: valorInicialDeLaVariableAcumuladoraARetornar
+    //     d: valorInicialDeLaVariableAcumuladoraADevolver
     return amounts.value.reduce((points, amount, i) => {
         const x = (300/ numPoints) * (i + 1);
         const y = amountToPixels(amount);
@@ -93,14 +102,38 @@ const points = computed(() => {
 const showPointer = ref(false);
 const pointer = ref(0);
 
+const emit = defineEmits(["select"]);
+
+watch(pointer, (value) => {
+    // Calculamos el ancho (trozo del eje 'X'), en píxeles, de nuestra gráfica
+    // correspondiente a lo que realmente ocupa CADA MOVIMIENTO dentro de la
+    // la caja que contiene nuestra gráfica (el elemento 'viewBox', cuya anchura
+    // total hemos fijado previamente a 300 pixeles), y lo redondeamos a píxeles
+    // enteros mediante la función Math.ceil(). Con esto obtenemos el índice del
+    // elemento del array 'amounts' que hemos seleccionado.
+    const index = Math.ceil((value / (300 / amounts.value.length)));
+
+    // Antes, sin embargo, tenemos que excluir (no hacer nada) si se selecciona
+    // cualquier punto de la pantalla del dispositivo que no pertenezcan al
+    // viewBox que contiene la gráfica de importes.
+    if (index < 0 || index > amounts.value.length ) return;
+
+    // Si se ha pulsado una coordenada correcta (correspondiente a un movimiento
+    // de la gráfica), pasamos al elemento padre (Home.vue) el importe del
+    // movimiento (indice) seleccionado del array de importes ('amounts').
+    emit("select", amounts.value[index]);
+});
+
 const tap = ({ target, touches }) => {
     showPointer.value = true;
-    // Ancho de la pantalla del dispositivo que utiliza la aplicación
-    // (SmartPhone, tablet, ...)
+    
+    // 'screenWidth' es el ancho de la pantalla del dispositivo que está utilizando
+    // la aplicación (SmartPhone, tablet, ...)
     const screenWidth = target.getBoundingClientRect().width;
 
-    // Coordenada X dónde comienza el elemento SVG (el gráfico de importes)
-    // dentro de la pantalla del dispositivo (SmartPhone, tablet, ...)
+    // Coordenada X dónde comienza el elemento SVG (viewBox, o lo que ocupa la caja
+    // que contiene el gráfico de importes) dentro de la pantalla del dispositivo
+    // (SmartPhone, tablet, ...).
     const svgInitialXPoint = target.getBoundingClientRect().x;
 
     // Coordenada X dónde se ha hecho el touch
@@ -112,7 +145,7 @@ const tap = ({ target, touches }) => {
     //
     //                       screenWidth <-> 300
     //    touchXPoint - svgInitialXPoint <-> x
-    pointer.value = ((touchXPoint - svgInitialXPoint) * 300) / screenWidth ;
+    pointer.value = ((touchXPoint - svgInitialXPoint) * 300) / screenWidth;
 }
 
 const untap = () => {

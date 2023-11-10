@@ -11,7 +11,10 @@
         :amount="amount"
       >
         <template #graphic>
-          <Graphic :amounts="latestAmounts" />
+          <Graphic
+            :amounts="latestAmounts"
+            @select="select"
+          />
         </template>
         <template #action>
           <Action
@@ -103,6 +106,10 @@ export default {
     },
     save() {
       localStorage.setItem("movements", JSON.stringify(this.movements));
+    },
+    select(el) {
+      console.log(el);
+      this.amount = el;
     }
   }
 };
