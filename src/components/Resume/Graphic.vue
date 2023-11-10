@@ -73,7 +73,7 @@ const amountToPixels = (amount) => {
 }
 
 const yZeroPoint = computed(() => {
-    return amountToPixels(0);
+    return amountToPixels(-100);
 });
 
 const points = computed(() => {
