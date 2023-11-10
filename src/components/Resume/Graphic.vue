@@ -54,17 +54,21 @@ const amountToPixels = (amount) => {
     const amountAbs = amount + Math.abs(minAmount);
     const amountsRange = Math.abs(maxAmount) + Math.abs(minAmount);
 
-    // 200 es la altura fijada del viewBox del polyline, en el proyecto
-    // Esto es un regla de 3 para calcular la equivalencia de valores
-    // (importes) reales adaptados al viewBox:
+    // 200 es la altura que hemos fijado enn el elemento viewBox que contiene
+    // la polilinea (polyline) que represetna el importe de los movimientos.
+    // Para adaptar los importe reales al tamaño de la caja que contiene la gráfica
+    // (tamaño del viewBox aplicamos una regla de 3, que nos dará la equivalencia
+    // de los direrentes valores (importes) reales adaptados al viewBox:
     //
     //      amountRange <-> 200
     //        amountAbs <-> x
     const viewBoxAdaptedAmount = ((amountAbs * 100) / amountsRange) * 2;
 
-    // Como el elemento viewBox va de 0 a 200, por su naturaleza, invertimos
-    // el eje de los valores para que los importe postitivos crezcan y
-    // los negativos decrezcan en el gráfico
+    // Hemos establecido que el alto del elemento que contiene la gráfica (viewBox)
+    // sea de 200. Por la naturaleza (como está programado) 'del elemento viewBox',
+    // debemois tener en cuenta de que en realidad su eje 'Y' varia de 0 a -200,
+    // y no de 0 a 200, así que, para que los importes postitivos crezcan y los negativos
+    // decrezcan en el gráfico, invertimos el eje Y mediante la siguiente operación.
     return 200 - viewBoxAdaptedAmount;
 }
 
