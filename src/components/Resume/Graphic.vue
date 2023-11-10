@@ -51,8 +51,8 @@ const amountToPixels = (amount) => {
     const minAmount = Math.min(...amounts.value);
     const maxAmount = Math.max(...amounts.value);
 
-    const amountsRange = Math.abs(minAmount) + Math.abs(maxAmount);
     const amountAbs = amount + Math.abs(minAmount);
+    const amountsRange = Math.abs(maxAmount) + Math.abs(minAmount);
 
     // 200 es la altura fijada del viewBox del polyline, en el proyecto
     // Esto es un regla de 3 para calcular la equivalencia de valores
@@ -60,7 +60,7 @@ const amountToPixels = (amount) => {
     //
     //      amountRange <-> 200
     //        amountAbs <-> x
-    const viewBoxAdaptedAmount = (amountAbs * 200) / amountsRange;
+    const viewBoxAdaptedAmount = ((amountAbs * 100) / amountsRange) * 2;
 
     // Como el elemento viewBox va de 0 a 200, por su naturaleza, invertimos
     // el eje de los valores para que los importe postitivos crezcan y
@@ -74,12 +74,16 @@ const yZeroPoint = computed(() => {
 
 const points = computed(() => {
     const numPoints = amounts.value.length;
-    // Array.prototype.reduce(funcion con los parámetros: variableAcumuladoraARetornar, valorActualdelArrayOriginal e indiceDelValorActualDelArrayOriginal' más ', valorInicialDeLaVariableAcumuladoraARetornar')
+    // Parámetros de Array.prototype.reduce((a, b, c) => {}, d);
+    //     a: variableAcumuladoraARetornar
+    //     b: valorActualdelArrayOriginal
+    //     c: indiceDelValorActualDelArrayOriginal
+    //     d: valorInicialDeLaVariableAcumuladoraARetornar
     return amounts.value.reduce((points, amount, i) => {
         const x = (300/ numPoints) * (i + 1);
         const y = amountToPixels(amount);
-        return  `${points} ${x},${y}`
-    }, `0, ${amountToPixels(amounts.value.length ? amounts.value[0] : 0)}`);
+        return  `${points} ${x},${y}`;
+    }, `0,${amountToPixels(amounts.value.length ? amounts.value[0] : 0)}`);
 });
 
 const showPointer = ref(false);
